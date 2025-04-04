@@ -10,12 +10,21 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
+
+    private fun chooseLayout(layout: ActivityMainLayouts) {
+        when (layout) {
+            ActivityMainLayouts.LINEAR -> setContentView(R.layout.activity_main_linear)
+            ActivityMainLayouts.CONSTRAINT -> setContentView(R.layout.activity_main_constrait)
+            ActivityMainLayouts.FRAME -> setContentView(R.layout.activity_main_frame)
+        }
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        //TODO Давай вынесем setContentView в отдельную функцию,
-        // которая будет принимать на вход enum с нужной вёрсткой.
-        setContentView(R.layout.activity_main_constrait)
+        val layout = ActivityMainLayouts.FRAME
+        chooseLayout(layout)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
