@@ -6,18 +6,16 @@
     android:layout_height="match_parent"
     android:background="@color/babyPowder">
 
-    <!--@id/main ниже, это родитель для этой view, поэтому тут лучше использовать parent:-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
     <TextView
         android:id="@+id/TextView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:textSize="46sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@id/main"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.35"
-        app:layout_constraintStart_toStartOf="@id/main"
-        app:layout_constraintTop_toTopOf="@id/main" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <Button
