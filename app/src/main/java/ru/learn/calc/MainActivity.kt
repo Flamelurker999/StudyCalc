@@ -9,7 +9,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
+
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var display: TextView
+    private var operation: String? = null
+    private var firstNumber: Int? = null
+    private var secondNumber: Int? = null
+    private var result: Int? = null
+
+    val DISPLAY_KEY = "display"
+    val OPERATION_KEY = "operation"
+    val FIRST_NUMBER_KEY = "firstNumber"
+    val SECOND_NUMBER_KEY = "secondNumber"
+    val RESULT_KEY = "result"
 
     private fun chooseLayout(layout: ActivityMainLayouts) {
         setContentView(
@@ -24,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val layout = ActivityMainLayouts.FRAME
+        val layout = ActivityMainLayouts.CONSTRAINT
         chooseLayout(layout)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -32,14 +45,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-
-        var firstNumber: Int? = null
-        var secondNumber: Int?
-        var result: Int? = null
-        var operation: String? = null
-
-        val display: TextView = findViewById(R.id.TextView)
-
+        display = findViewById(R.id.TextView)
         val clearButton: Button = findViewById(R.id.clearButton)
         val plusButton: Button = findViewById(R.id.plusButton)
         val minusButton: Button = findViewById(R.id.minusButton)
@@ -198,9 +204,45 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun showToast(text: String) {
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(DISPLAY_KEY, display.text.toString())
+        outState.putString(OPERATION_KEY, operation)
+        outState.putString(RESULT_KEY, result.toString())
+        outState.putString(FIRST_NUMBER_KEY, firstNumber.toString())
+        outState.putString(SECOND_NUMBER_KEY, secondNumber.toString())
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        val savedResult = savedInstanceState.getString(RESULT_KEY)
+        val savedFirstNumber = savedInstanceState.getString(FIRST_NUMBER_KEY)
+        val savedSecondNumber = savedInstanceState.getString(SECOND_NUMBER_KEY)
+
+        display.text = savedInstanceState.getString(DISPLAY_KEY)
+        operation = savedInstanceState.getString(OPERATION_KEY)
+
+        result = if (savedResult != "null") {
+            savedResult?.toInt()
+        } else null
+
+        firstNumber = if (savedFirstNumber != "null") {
+            savedFirstNumber?.toInt()
+        } else null
+
+        secondNumber = if (savedSecondNumber != "null") {
+            savedSecondNumber?.toInt()
+        } else null
+
+        super.onRestoreInstanceState(savedInstanceState)
+    }
+
+
+    private fun showToast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
 
 
 }
+
+
+
