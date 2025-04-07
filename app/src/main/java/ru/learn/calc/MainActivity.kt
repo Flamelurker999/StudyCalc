@@ -12,17 +12,19 @@ import androidx.core.view.WindowInsetsCompat
 class MainActivity : AppCompatActivity() {
 
     private fun chooseLayout(layout: ActivityMainLayouts) {
-      setContentView(when (layout) {
-          ActivityMainLayouts.LINEAR -> R.layout.activity_main_linear
-          ActivityMainLayouts.CONSTRAINT -> R.layout.activity_main_constrait
-          ActivityMainLayouts.FRAME -> R.layout.activity_main_frame
-      })
+        setContentView(
+            when (layout) {
+                ActivityMainLayouts.LINEAR -> R.layout.activity_main_linear
+                ActivityMainLayouts.CONSTRAINT -> R.layout.activity_main_constrait
+                ActivityMainLayouts.FRAME -> R.layout.activity_main_frame
+            }
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val layout = ActivityMainLayouts.CONSTRAINT
+        val layout = ActivityMainLayouts.FRAME
         chooseLayout(layout)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
