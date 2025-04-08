@@ -18,11 +18,13 @@ class MainActivity : AppCompatActivity() {
     private var secondNumber: Int? = null
     private var result: Int? = null
 
-    val DISPLAY_KEY = "display"
-    val OPERATION_KEY = "operation"
-    val FIRST_NUMBER_KEY = "firstNumber"
-    val SECOND_NUMBER_KEY = "secondNumber"
-    val RESULT_KEY = "result"
+    companion object {
+        const val DISPLAY_KEY = "display"
+        const val OPERATION_KEY = "operation"
+        const val FIRST_NUMBER_KEY = "firstNumber"
+        const val SECOND_NUMBER_KEY = "secondNumber"
+        const val RESULT_KEY = "result"
+    }
 
     private fun chooseLayout(layout: ActivityMainLayouts) {
         setContentView(
@@ -240,6 +242,8 @@ class MainActivity : AppCompatActivity() {
     private fun showToast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
+
+
 
 
 }
