@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     private var secondNumber: Int? = null
     private var result: Int? = null
 
-    companion object {
+  private companion object {
         const val DISPLAY_KEY = "display"
         const val OPERATION_KEY = "operation"
         const val FIRST_NUMBER_KEY = "firstNumber"
