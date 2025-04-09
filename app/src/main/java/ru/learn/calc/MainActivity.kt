@@ -1,5 +1,6 @@
 package ru.learn.calc
 
+import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -12,18 +13,11 @@ import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var calcValues: CalcValues
     private lateinit var display: TextView
-    private var operation: String? = null
-    private var firstNumber: Int? = null
-    private var secondNumber: Int? = null
-    private var result: Int? = null
 
-  private companion object {
-        const val DISPLAY_KEY = "display"
-        const val OPERATION_KEY = "operation"
-        const val FIRST_NUMBER_KEY = "firstNumber"
-        const val SECOND_NUMBER_KEY = "secondNumber"
-        const val RESULT_KEY = "result"
+    private companion object {
+        const val CALC_VALUE_KEY = "calc"
     }
 
     private fun chooseLayout(layout: ActivityMainLayouts) {
@@ -41,13 +35,16 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         val layout = ActivityMainLayouts.CONSTRAINT
         chooseLayout(layout)
+
+        calcValues = CalcValues()
+        display = findViewById(R.id.TextView)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        display = findViewById(R.id.TextView)
         val clearButton: Button = findViewById(R.id.clearButton)
         val plusButton: Button = findViewById(R.id.plusButton)
         val minusButton: Button = findViewById(R.id.minusButton)
@@ -67,125 +64,144 @@ class MainActivity : AppCompatActivity() {
         val digitNine: Button = findViewById(R.id.digitNineButton)
         val digitZero: Button = findViewById(R.id.digitZeroButton)
 
+
         fun checkResultForClear() {
-            if (result != null) {
-                result = null
-                display.text = ""
+            with(calcValues) {
+                if (result != null) {
+                    result = null
+                    display.text = ""
+                }
             }
+        }
+
+        fun printLiteral(literal: String?, firstNumber: Int? = null) {
+                if (firstNumber == null) {
+                    display.text = display.text.toString() + literal
+                } else display.text = firstNumber.toString() + " $literal "
         }
 
 
         digitOne.setOnClickListener {
             checkResultForClear()
-            display.text = display.text.toString() + "1"
+            printLiteral("1")
         }
 
         digitTwo.setOnClickListener {
             checkResultForClear()
-            display.text = display.text.toString() + "2"
+            printLiteral("2")
         }
 
         digitThree.setOnClickListener {
             checkResultForClear()
-            display.text = display.text.toString() + "3"
+            printLiteral("3")
         }
 
         digitFour.setOnClickListener {
             checkResultForClear()
-            display.text = display.text.toString() + "4"
+            printLiteral("4")
         }
 
         digitFive.setOnClickListener {
             checkResultForClear()
-            display.text = display.text.toString() + "5"
+            printLiteral("5")
         }
 
         digitSix.setOnClickListener {
             checkResultForClear()
-            display.text = display.text.toString() + "6"
+            printLiteral("6")
         }
 
         digitSeven.setOnClickListener {
             checkResultForClear()
-            display.text = display.text.toString() + "7"
+            printLiteral("7")
         }
 
         digitEight.setOnClickListener {
             checkResultForClear()
-            display.text = display.text.toString() + "8"
+            printLiteral("8")
         }
 
         digitNine.setOnClickListener {
             checkResultForClear()
-            display.text = display.text.toString() + "9"
+            printLiteral("9")
         }
 
         digitZero.setOnClickListener {
             checkResultForClear()
-            if (display.text.isNotEmpty() && result == null) {
-                display.text = display.text.toString() + "0"
+            if (display.text.isNotEmpty()) {
+                printLiteral("0")
             }
         }
 
 
         plusButton.setOnClickListener {
             checkResultForClear()
-            if (firstNumber == null && display.text.isNotEmpty()) {
-                firstNumber = display.text.toString().toInt()
-                operation = "+"
-                display.text = firstNumber.toString() + " + "
+            with(calcValues) {
+                if (firstNumber == null && display.text.isNotEmpty()) {
+                    firstNumber = display.text.toString().toInt()
+                    operation = "+"
+                    printLiteral(operation, firstNumber)
+                }
             }
         }
 
         minusButton.setOnClickListener {
             checkResultForClear()
-            if (firstNumber == null && display.text.isNotEmpty()) {
-                firstNumber = display.text.toString().toInt()
-                operation = "-"
-                display.text = firstNumber.toString() + " - "
+            with(calcValues) {
+                if (firstNumber == null && display.text.isNotEmpty()) {
+                    firstNumber = display.text.toString().toInt()
+                    operation = "-"
+                    printLiteral(operation, firstNumber)
+                }
             }
         }
 
         multiplyButton.setOnClickListener {
             checkResultForClear()
-            if (firstNumber == null && display.text.isNotEmpty()) {
-                firstNumber = display.text.toString().toInt()
-                operation = "*"
-                display.text = firstNumber.toString() + " * "
+            with(calcValues) {
+                if (firstNumber == null && display.text.isNotEmpty()) {
+                    firstNumber = display.text.toString().toInt()
+                    operation = "*"
+                    printLiteral(operation, firstNumber)
+                }
             }
         }
 
         divisionButton.setOnClickListener {
             checkResultForClear()
-            if (firstNumber == null && display.text.isNotEmpty()) {
-                firstNumber = display.text.toString().toInt()
-                operation = "/"
-                display.text = firstNumber.toString() + " / "
+            with(calcValues) {
+                if (firstNumber == null && display.text.isNotEmpty()) {
+                    firstNumber = display.text.toString().toInt()
+                    operation = "/"
+                    printLiteral(operation, firstNumber)
+                }
             }
         }
 
         equalButton.setOnClickListener {
-            if (firstNumber != null) {
-                try {
-                    val list: List<String> = display.text.toString().split(' ')
-                    if (list.last() != "") {
-                        secondNumber = list.last().toInt()
-                        result = when (operation) {
-                            "+" -> firstNumber!! + secondNumber!!
-                            "-" -> firstNumber!! - secondNumber!!
-                            "*" -> firstNumber!! * secondNumber!!
-                            "/" -> firstNumber!! / secondNumber!!
-                            else -> null
+            with(calcValues) {
+                if (firstNumber != null) {
+                    try {
+                        val list: List<String> = display.text.toString().split(' ')
+                        if (list.last() != "") {
+                            secondNumber = list.last().toInt()
+                            result = when (operation) {
+                                "+" -> firstNumber!! + secondNumber!!
+                                "-" -> firstNumber!! - secondNumber!!
+                                "*" -> firstNumber!! * secondNumber!!
+                                "/" -> firstNumber!! / secondNumber!!
+                                else -> null
+                            }
+                            firstNumber = null
+                            secondNumber = null
+                            display.text = result.toString()
                         }
+                    } catch (e: ArithmeticException) {
                         firstNumber = null
                         secondNumber = null
-                        display.text = result.toString()
+                        result = 0
+                        display.text = "Делить на 0 нельзя!"
                     }
-                } catch (e: ArithmeticException) {
-                    firstNumber = null
-                    secondNumber = null
-                    result = 0
-                    display.text = "Делить на 0 нельзя!"
                 }
             }
         }
@@ -193,10 +209,12 @@ class MainActivity : AppCompatActivity() {
 
 
         clearButton.setOnClickListener {
-            display.text = ""
-            firstNumber = null
-            secondNumber = null
-            operation = null
+            with(calcValues) {
+                display.text = ""
+                firstNumber = null
+                secondNumber = null
+                operation = null
+            }
         }
 
 
@@ -207,34 +225,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString(DISPLAY_KEY, display.text.toString())
-        outState.putString(OPERATION_KEY, operation)
-        outState.putString(RESULT_KEY, result.toString())
-        outState.putString(FIRST_NUMBER_KEY, firstNumber.toString())
-        outState.putString(SECOND_NUMBER_KEY, secondNumber.toString())
+        calcValues.displayText = display.text.toString()
+        outState.putSerializable(CALC_VALUE_KEY, calcValues)
         super.onSaveInstanceState(outState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        val savedResult = savedInstanceState.getString(RESULT_KEY)
-        val savedFirstNumber = savedInstanceState.getString(FIRST_NUMBER_KEY)
-        val savedSecondNumber = savedInstanceState.getString(SECOND_NUMBER_KEY)
-
-        display.text = savedInstanceState.getString(DISPLAY_KEY)
-        operation = savedInstanceState.getString(OPERATION_KEY)
-
-        result = if (savedResult != "null") {
-            savedResult?.toInt()
-        } else null
-
-        firstNumber = if (savedFirstNumber != "null") {
-            savedFirstNumber?.toInt()
-        } else null
-
-        secondNumber = if (savedSecondNumber != "null") {
-            savedSecondNumber?.toInt()
-        } else null
-
+        calcValues = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+             savedInstanceState.getSerializable(CALC_VALUE_KEY, CalcValues::class.java) as CalcValues
+        } else {
+            savedInstanceState.getSerializable(CALC_VALUE_KEY) as CalcValues
+        }
+        display.text = calcValues.displayText
         super.onRestoreInstanceState(savedInstanceState)
     }
 
@@ -242,8 +244,6 @@ class MainActivity : AppCompatActivity() {
     private fun showToast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
-
-
 
 
 }
