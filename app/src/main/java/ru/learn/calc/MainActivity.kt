@@ -207,7 +207,6 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
         clearButton.setOnClickListener {
             with(calcValues) {
                 display.text = ""
