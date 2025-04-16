@@ -1,6 +1,5 @@
 package ru.learn.calc
 
-import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -9,16 +8,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 
 
 class MainActivity : AppCompatActivity() {
-
-    private var calcValues = CalcValues()
-    private lateinit var display: TextView
-
-    private companion object {
-        const val CALC_VALUE_KEY = "calc"
-    }
 
     private fun chooseLayout(layout: ActivityMainLayouts) {
         setContentView(
@@ -36,7 +29,9 @@ class MainActivity : AppCompatActivity() {
         val layout = ActivityMainLayouts.CONSTRAINT
         chooseLayout(layout)
 
-        display = findViewById(R.id.TextView)
+        val calcValues = ViewModelProvider(this)[CalcViewModel::class.java]
+        val display = findViewById<TextView>(R.id.TextView)
+        display.text = calcValues.displayText
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -68,26 +63,21 @@ class MainActivity : AppCompatActivity() {
             with(calcValues) {
                 if (result != null) {
                     result = null
-                    display.text = ""
+                    displayText = ""
+                    display.text = displayText
                 }
             }
         }
 
-        fun setNumbersToNull(resultNumber: Int? = 0) {
-            with(calcValues) {
-                firstNumber = null
-                secondNumber = null
-                if (resultNumber == null) result = 0
-            }
-        }
 
         fun printLiteral(literal: String?, firstNumber: Int? = null) {
             if (firstNumber == null) {
-                display.text = "${display.text}$literal"
+                calcValues.displayText = "${display.text}$literal"
+                display.text = calcValues.displayText
 
             } else if (firstNumber != null) {
-                display.text =
-                    "$firstNumber $literal "
+                calcValues.displayText = "$firstNumber $literal "
+                display.text = calcValues.displayText
             }
         }
 
@@ -205,12 +195,14 @@ class MainActivity : AppCompatActivity() {
                                     else -> null
                                 }
                                 setNumbersToNull()
-                                display.text = result.toString()
+                                displayText = result.toString()
+                                display.text = displayText
                             }
                         }
                     } catch (e: ArithmeticException) {
                         setNumbersToNull(result)
-                        display.text = getString(R.string.division_by_zero_text)
+                        displayText = getString(R.string.division_by_zero_text)
+                        display.text = displayText
                     }
                 }
             }
@@ -218,12 +210,8 @@ class MainActivity : AppCompatActivity() {
 
 
         clearButton.setOnClickListener {
-            with(calcValues) {
-                display.text = ""
-                firstNumber = null
-                secondNumber = null
-                operation = null
-            }
+            calcValues.clearValues()
+            display.text = calcValues.displayText
         }
 
 
@@ -233,27 +221,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        calcValues.displayText = display.text.toString()
-        outState.putSerializable(CALC_VALUE_KEY, calcValues)
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        calcValues = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            savedInstanceState.getSerializable(CALC_VALUE_KEY, CalcValues::class.java) as CalcValues
-        } else {
-            savedInstanceState.getSerializable(CALC_VALUE_KEY) as CalcValues
-        }
-        display.text = calcValues.displayText
-        super.onRestoreInstanceState(savedInstanceState)
-    }
-
-
     private fun showToast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
-
 
 }
 
