@@ -8,7 +8,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
 
 
 class MainActivity : AppCompatActivity() {
@@ -23,15 +22,16 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+   private val calcViewModel = MainActivityViewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         val layout = ActivityMainLayouts.CONSTRAINT
         chooseLayout(layout)
 
-        val calcValues = ViewModelProvider(this)[CalcViewModel::class.java]
         val display = findViewById<TextView>(R.id.TextView)
-        display.text = calcValues.displayText
+        display.text = calcViewModel.displayText
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
 
 
         fun checkResultForClear() {
-            with(calcValues) {
+            with(calcViewModel) {
                 if (result != null) {
                     result = null
                     displayText = ""
@@ -72,12 +72,12 @@ class MainActivity : AppCompatActivity() {
 
         fun printLiteral(literal: String?, firstNumber: Int? = null) {
             if (firstNumber == null) {
-                calcValues.displayText = "${display.text}$literal"
-                display.text = calcValues.displayText
+                calcViewModel.displayText = "${display.text}$literal"
+                display.text = calcViewModel.displayText
 
-            } else if (firstNumber != null) {
-                calcValues.displayText = "$firstNumber $literal "
-                display.text = calcValues.displayText
+            } else {
+                calcViewModel.displayText = "$firstNumber $literal "
+                display.text = calcViewModel.displayText
             }
         }
 
@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity() {
 
         plusButton.setOnClickListener {
             checkResultForClear()
-            with(calcValues) {
+            with(calcViewModel) {
                 if (firstNumber == null && display.text.isNotEmpty()) {
                     firstNumber = display.text.toString().toInt()
                     operation = getString(R.string.plus_text)
@@ -148,7 +148,7 @@ class MainActivity : AppCompatActivity() {
 
         minusButton.setOnClickListener {
             checkResultForClear()
-            with(calcValues) {
+            with(calcViewModel) {
                 if (firstNumber == null && display.text.isNotEmpty()) {
                     firstNumber = display.text.toString().toInt()
                     operation = getString(R.string.minus_text)
@@ -159,7 +159,7 @@ class MainActivity : AppCompatActivity() {
 
         multiplyButton.setOnClickListener {
             checkResultForClear()
-            with(calcValues) {
+            with(calcViewModel) {
                 if (firstNumber == null && display.text.isNotEmpty()) {
                     firstNumber = display.text.toString().toInt()
                     operation = getString(R.string.multiply_text)
@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity() {
 
         divisionButton.setOnClickListener {
             checkResultForClear()
-            with(calcValues) {
+            with(calcViewModel) {
                 if (firstNumber == null && display.text.isNotEmpty()) {
                     firstNumber = display.text.toString().toInt()
                     operation = getString(R.string.division_text)
@@ -180,7 +180,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         equalButton.setOnClickListener {
-            with(calcValues) {
+            with(calcViewModel) {
                 firstNumber?.let { first ->
                     try {
                         val list: List<String> = display.text.toString().split(' ')
@@ -210,8 +210,8 @@ class MainActivity : AppCompatActivity() {
 
 
         clearButton.setOnClickListener {
-            calcValues.clearValues()
-            display.text = calcValues.displayText
+            calcViewModel.clearValues()
+            display.text = calcViewModel.displayText
         }
 
 
