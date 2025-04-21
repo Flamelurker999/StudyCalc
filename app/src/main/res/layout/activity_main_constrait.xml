@@ -8,7 +8,7 @@
     android:background="@color/babyPowder">
 
     <TextView
-        android:id="@+id/TextView"
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:textSize="46sp"
@@ -29,7 +29,7 @@
         app:layout_constraintBottom_toTopOf="@id/digitSevenButton"
         app:layout_constraintEnd_toStartOf="@id/bracketButton"
         app:layout_constraintStart_toStartOf="@id/main"
-        app:layout_constraintTop_toBottomOf="@id/TextView" />
+        app:layout_constraintTop_toBottomOf="@id/textView" />
 
     <Button
         android:id="@+id/bracketButton"
@@ -40,7 +40,7 @@
         app:layout_constraintBottom_toTopOf="@id/digitEightButton"
         app:layout_constraintEnd_toStartOf="@id/percentButton"
         app:layout_constraintStart_toEndOf="@id/clearButton"
-        app:layout_constraintTop_toBottomOf="@id/TextView" />
+        app:layout_constraintTop_toBottomOf="@id/textView" />
 
     <Button
         android:id="@+id/percentButton"
@@ -51,7 +51,7 @@
         app:layout_constraintBottom_toTopOf="@id/digitNineButton"
         app:layout_constraintEnd_toStartOf="@id/divButton"
         app:layout_constraintStart_toEndOf="@id/bracketButton"
-        app:layout_constraintTop_toBottomOf="@id/TextView" />
+        app:layout_constraintTop_toBottomOf="@id/textView" />
 
     <Button
         android:id="@+id/divButton"
@@ -62,7 +62,7 @@
         app:layout_constraintBottom_toTopOf="@id/multButton"
         app:layout_constraintEnd_toEndOf="@id/main"
         app:layout_constraintStart_toEndOf="@id/percentButton"
-        app:layout_constraintTop_toBottomOf="@id/TextView" />
+        app:layout_constraintTop_toBottomOf="@id/textView" />
 
     <Button
         android:id="@+id/multButton"

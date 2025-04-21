@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
         _binding = ActivityMainConstraitBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.TextView.text = calcViewModel.displayText
+        binding.textView.text = calcViewModel.displayText
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -78,10 +78,10 @@ class MainActivity : AppCompatActivity() {
     private fun Button.handleNumberButtonClick() {
         setOnClickListener {
             with(binding) {
-                TextView.text = calcViewModel.checkResultForClear()
-                TextView.text = calcViewModel.printLiteral(
+                textView.text = calcViewModel.checkResultForClear()
+                textView.text = calcViewModel.printLiteral(
                     literal = text.toString(),
-                    textInput = TextView.text.toString()
+                    textInput = textView.text.toString()
                 )
             }
         }
@@ -90,14 +90,14 @@ class MainActivity : AppCompatActivity() {
     private fun Button.handleOperatorButtonClick(operations: String) {
         setOnClickListener {
             with(calcViewModel) {
-                binding.TextView.text = calcViewModel.checkResultForClear()
-                if (firstNumber == null && binding.TextView.text.isNotEmpty()) {
-                    firstNumber = binding.TextView.text.toString().toInt()
+                binding.textView.text = calcViewModel.checkResultForClear()
+                if (firstNumber == null && binding.textView.text.isNotEmpty()) {
+                    firstNumber = binding.textView.text.toString().toInt()
                     operation = operations
-                    binding.TextView.text = printLiteral(
+                    binding.textView.text = printLiteral(
                         operations,
                         firstNumber,
-                        binding.TextView.text.toString()
+                        binding.textView.text.toString()
                     )
                 }
             }
@@ -107,8 +107,8 @@ class MainActivity : AppCompatActivity() {
     private fun Button.handleEqualButtonClick() {
         setOnClickListener {
             with(binding) {
-                TextView.text = calcViewModel.equal(
-                    TextView.text.toString(),
+                textView.text = calcViewModel.equal(
+                    textView.text.toString(),
                     getString(R.string.plus_text),
                     getString(R.string.minus_text),
                     getString(R.string.multiply_text),
@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun Button.handleClearButtonClick() {
         setOnClickListener {
-            binding.TextView.text = calcViewModel.clearValues()
+            binding.textView.text = calcViewModel.clearValues()
         }
     }
 
