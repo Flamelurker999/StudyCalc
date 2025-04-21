@@ -2,36 +2,29 @@ package ru.learn.calc
 
 import android.os.Bundle
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import ru.learn.calc.databinding.ActivityMainConstraitBinding
 
 class MainActivity : AppCompatActivity() {
 
     private val calcViewModel by viewModels<MainActivityViewModel>()
-
-    private fun chooseLayout(layout: ActivityMainLayouts) {
-        setContentView(
-            when (layout) {
-                ActivityMainLayouts.LINEAR -> R.layout.activity_main_linear
-                ActivityMainLayouts.CONSTRAINT -> R.layout.activity_main_constrait
-                ActivityMainLayouts.FRAME -> R.layout.activity_main_frame
-            }
-        )
-    }
+    private var _binding: ActivityMainConstraitBinding? = null
+    private val binding
+        get() = _binding
+            ?: throw IllegalStateException("Binding for ActivityMainConstraitBinding must not be null")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val layout = ActivityMainLayouts.CONSTRAINT
-        chooseLayout(layout)
 
-        val displayTextView = findViewById<TextView>(R.id.TextView)
-        displayTextView.text = calcViewModel.displayText
+        _binding = ActivityMainConstraitBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.TextView.text = calcViewModel.displayText
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -39,165 +32,106 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val clearButton: Button = findViewById(R.id.clearButton)
-        val plusButton: Button = findViewById(R.id.plusButton)
-        val minusButton: Button = findViewById(R.id.minusButton)
-        val multiplyButton: Button = findViewById(R.id.multButton)
-        val divisionButton: Button = findViewById(R.id.divButton)
-        val commaButton: Button = findViewById(R.id.commaButton)
-        val equalButton: Button = findViewById(R.id.equalButton)
-
-        handleNumberButtons(displayTextView)
+        handleNumberButtons()
         handleOperatorButtons()
-
-        plusButton.setOnClickListener {
-            checkResultForClear(displayTextView)
-            with(calcViewModel) {
-                if (firstNumber == null && displayTextView.text.isNotEmpty()) {
-                    firstNumber = displayTextView.text.toString().toInt()
-                    operation = getString(R.string.plus_text)
-                    printLiteral(operation, firstNumber, displayTextView)
-                }
-            }
-        }
-
-        minusButton.setOnClickListener {
-            checkResultForClear(displayTextView)
-            with(calcViewModel) {
-                if (firstNumber == null && displayTextView.text.isNotEmpty()) {
-                    firstNumber = displayTextView.text.toString().toInt()
-                    operation = getString(R.string.minus_text)
-                    printLiteral(operation, firstNumber, displayTextView)
-                }
-            }
-        }
-
-        multiplyButton.setOnClickListener {
-            checkResultForClear(displayTextView)
-            with(calcViewModel) {
-                if (firstNumber == null && displayTextView.text.isNotEmpty()) {
-                    firstNumber = displayTextView.text.toString().toInt()
-                    operation = getString(R.string.multiply_text)
-                    printLiteral(operation, firstNumber, displayTextView)
-                }
-            }
-        }
-
-        divisionButton.setOnClickListener {
-            checkResultForClear(displayTextView)
-            with(calcViewModel) {
-                if (firstNumber == null && displayTextView.text.isNotEmpty()) {
-                    firstNumber = displayTextView.text.toString().toInt()
-                    operation = getString(R.string.division_text)
-                    printLiteral(operation, firstNumber, displayTextView)
-                }
-            }
-        }
-
-        equalButton.setOnClickListener {
-            with(calcViewModel) {
-                firstNumber?.let { first ->
-                    try {
-                        val list: List<String> = displayTextView.text.toString().split(' ')
-                        if (list.last() != "") {
-                            secondNumber = list.last().toInt()
-                            secondNumber?.let { second ->
-                                result = when (operation) {
-                                    getString(R.string.plus_text) -> first + second
-                                    getString(R.string.minus_text) -> first - second
-                                    getString(R.string.multiply_text) -> first * second
-                                    getString(R.string.division_text) -> first / second
-                                    else -> null
-                                }
-                                setNumbersToNull()
-                                displayText = result.toString()
-                                displayTextView.text = displayText
-                            }
-                        }
-                    } catch (e: ArithmeticException) {
-                        setNumbersToNull(result)
-                        displayText = getString(R.string.division_by_zero_text)
-                        displayTextView.text = displayText
-                    }
-                }
-            }
-        }
-
-
-        clearButton.setOnClickListener {
-            calcViewModel.clearValues()
-            displayTextView.text = calcViewModel.displayText
-        }
-
-
-        commaButton.setOnClickListener {
-            showToast("Hello, friend!")
-        }
-
+        handleEqualButton()
+        handleClearButton()
+        handleCommaButton()
     }
 
     private fun handleOperatorButtons() {
+        with(binding) {
+            plusButton.handleOperatorButtonClick(getString(R.string.plus_text))
+            minusButton.handleOperatorButtonClick(getString(R.string.minus_text))
+            multButton.handleOperatorButtonClick(getString(R.string.multiply_text))
+            divButton.handleOperatorButtonClick(getString(R.string.division_text))
+        }
     }
 
-    private fun handleNumberButtons(displayTextView: TextView) {
-        val digitOne: Button = findViewById(R.id.digitOneButton)
-        val digitTwo: Button = findViewById(R.id.digitTwoButton)
-        val digitThree: Button = findViewById(R.id.digitThreeButton)
-        val digitFour: Button = findViewById(R.id.digitFourButton)
-        val digitFive: Button = findViewById(R.id.digitFiveButton)
-        val digitSix: Button = findViewById(R.id.digitSixButton)
-        val digitSeven: Button = findViewById(R.id.digitSevenButton)
-        val digitEight: Button = findViewById(R.id.digitEightButton)
-        val digitNine: Button = findViewById(R.id.digitNineButton)
-        val digitZero: Button = findViewById(R.id.digitZeroButton)
-
-        digitOne.handleButtonClick(displayTextView)
-        digitTwo.handleButtonClick(displayTextView)
-        digitThree.handleButtonClick(displayTextView)
-        digitFour.handleButtonClick(displayTextView)
-        digitFive.handleButtonClick(displayTextView)
-        digitSix.handleButtonClick(displayTextView)
-        digitSeven.handleButtonClick(displayTextView)
-        digitEight.handleButtonClick(displayTextView)
-        digitNine.handleButtonClick(displayTextView)
-        digitZero.handleButtonClick(displayTextView)
+    private fun handleEqualButton() {
+        binding.equalButton.handleEqualButtonClick()
     }
 
-    private fun checkResultForClear(textView: TextView) {
-        with(calcViewModel) {
-            if (result != null) {
-                result = null
-                displayText = ""
-                textView.text = displayText
+    private fun handleClearButton() {
+        binding.clearButton.handleClearButtonClick()
+    }
+
+    private fun handleCommaButton() {
+        binding.commaButton.handleCommaButtonClick()
+    }
+
+    private fun handleNumberButtons() {
+        with(binding) {
+            digitOneButton.handleNumberButtonClick()
+            digitTwoButton.handleNumberButtonClick()
+            digitThreeButton.handleNumberButtonClick()
+            digitFourButton.handleNumberButtonClick()
+            digitFiveButton.handleNumberButtonClick()
+            digitSixButton.handleNumberButtonClick()
+            digitSevenButton.handleNumberButtonClick()
+            digitEightButton.handleNumberButtonClick()
+            digitNineButton.handleNumberButtonClick()
+            digitZeroButton.handleNumberButtonClick()
+        }
+    }
+
+    private fun Button.handleNumberButtonClick() {
+        setOnClickListener {
+            with(binding) {
+                TextView.text = calcViewModel.checkResultForClear()
+                TextView.text = calcViewModel.printLiteral(
+                    literal = text.toString(),
+                    textInput = TextView.text.toString()
+                )
             }
         }
     }
 
-    private fun Button.handleButtonClick(displayTextView: TextView) {
+    private fun Button.handleOperatorButtonClick(operations: String) {
         setOnClickListener {
-            checkResultForClear(textView = displayTextView)
-            printLiteral(literal = text.toString(), displayTextView = displayTextView)
+            with(calcViewModel) {
+                binding.TextView.text = calcViewModel.checkResultForClear()
+                if (firstNumber == null && binding.TextView.text.isNotEmpty()) {
+                    firstNumber = binding.TextView.text.toString().toInt()
+                    operation = operations
+                    binding.TextView.text = printLiteral(
+                        operations,
+                        firstNumber,
+                        binding.TextView.text.toString()
+                    )
+                }
+            }
         }
     }
 
-    private fun printLiteral(
-        literal: String?,
-        firstNumber: Int? = null,
-        displayTextView: TextView
-    ) {
-        if (firstNumber == null) {
-            calcViewModel.displayText = "${displayTextView.text}$literal"
-        } else {
-            calcViewModel.displayText = "$firstNumber $literal "
+    private fun Button.handleEqualButtonClick() {
+        setOnClickListener {
+            with(binding) {
+                TextView.text = calcViewModel.equal(
+                    TextView.text.toString(),
+                    getString(R.string.plus_text),
+                    getString(R.string.minus_text),
+                    getString(R.string.multiply_text),
+                    getString(R.string.division_text),
+                    getString(R.string.division_by_zero_text)
+                )
+            }
         }
-        displayTextView.text = calcViewModel.displayText
+    }
+
+    private fun Button.handleClearButtonClick() {
+        setOnClickListener {
+            binding.TextView.text = calcViewModel.clearValues()
+        }
+    }
+
+    private fun Button.handleCommaButtonClick() {
+        setOnClickListener {
+            showToast("Hello, friend!")
+        }
     }
 
     private fun showToast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
-
 }
-
-
-
