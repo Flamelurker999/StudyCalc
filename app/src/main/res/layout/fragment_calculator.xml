@@ -2,10 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/fragment_calculator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/babyPowder">
+    android:background="@color/babyPowder"
+    tools:context=".CalculatorFragment">
 
     <TextView
         android:id="@+id/textView"
@@ -28,7 +29,7 @@
         android:text="@string/clear_text"
         app:layout_constraintBottom_toTopOf="@id/digitSevenButton"
         app:layout_constraintEnd_toStartOf="@id/bracketButton"
-        app:layout_constraintStart_toStartOf="@id/main"
+        app:layout_constraintStart_toStartOf="@id/fragment_calculator"
         app:layout_constraintTop_toBottomOf="@id/textView" />
 
     <Button
@@ -60,7 +61,7 @@
         android:layout_height="94dp"
         android:text="@string/division_text"
         app:layout_constraintBottom_toTopOf="@id/multButton"
-        app:layout_constraintEnd_toEndOf="@id/main"
+        app:layout_constraintEnd_toEndOf="@id/fragment_calculator"
         app:layout_constraintStart_toEndOf="@id/percentButton"
         app:layout_constraintTop_toBottomOf="@id/textView" />
 
@@ -71,7 +72,7 @@
         android:layout_height="94dp"
         android:text="@string/multiply_text"
         app:layout_constraintBottom_toTopOf="@id/minusButton"
-        app:layout_constraintEnd_toEndOf="@id/main"
+        app:layout_constraintEnd_toEndOf="@id/fragment_calculator"
         app:layout_constraintStart_toEndOf="@id/digitNineButton"
         app:layout_constraintTop_toBottomOf="@id/divButton" />
 
@@ -82,7 +83,7 @@
         android:layout_height="94dp"
         android:text="@string/minus_text"
         app:layout_constraintBottom_toTopOf="@id/plusButton"
-        app:layout_constraintEnd_toEndOf="@id/main"
+        app:layout_constraintEnd_toEndOf="@id/fragment_calculator"
         app:layout_constraintStart_toEndOf="@id/digitSixButton"
         app:layout_constraintTop_toBottomOf="@id/multButton" />
 
@@ -93,7 +94,7 @@
         android:layout_height="94dp"
         android:text="@string/plus_text"
         app:layout_constraintBottom_toTopOf="@id/equalButton"
-        app:layout_constraintEnd_toEndOf="@id/main"
+        app:layout_constraintEnd_toEndOf="@id/fragment_calculator"
         app:layout_constraintStart_toEndOf="@id/digitThreeButton"
         app:layout_constraintTop_toBottomOf="@id/minusButton" />
 
@@ -103,8 +104,8 @@
         android:layout_width="94dp"
         android:layout_height="94dp"
         android:text="@string/equal_text"
-        app:layout_constraintBottom_toBottomOf="@id/main"
-        app:layout_constraintEnd_toEndOf="@id/main"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_calculator"
+        app:layout_constraintEnd_toEndOf="@id/fragment_calculator"
         app:layout_constraintStart_toEndOf="@id/deleteButton"
         app:layout_constraintTop_toBottomOf="@id/plusButton" />
 
@@ -117,7 +118,7 @@
         android:text="@string/seven_text"
         app:layout_constraintBottom_toTopOf="@id/digitFourButton"
         app:layout_constraintEnd_toStartOf="@id/digitEightButton"
-        app:layout_constraintStart_toStartOf="@id/main"
+        app:layout_constraintStart_toStartOf="@id/fragment_calculator"
         app:layout_constraintTop_toBottomOf="@id/clearButton" />
 
     <Button
@@ -150,7 +151,7 @@
         android:text="@string/four_text"
         app:layout_constraintBottom_toTopOf="@id/digitOneButton"
         app:layout_constraintEnd_toStartOf="@id/digitFiveButton"
-        app:layout_constraintStart_toStartOf="@id/main"
+        app:layout_constraintStart_toStartOf="@id/fragment_calculator"
         app:layout_constraintTop_toBottomOf="@id/digitSevenButton" />
 
     <Button
@@ -183,7 +184,7 @@
         android:text="@string/one_text"
         app:layout_constraintBottom_toTopOf="@id/digitZeroButton"
         app:layout_constraintEnd_toStartOf="@id/digitTwoButton"
-        app:layout_constraintStart_toStartOf="@id/main"
+        app:layout_constraintStart_toStartOf="@id/fragment_calculator"
         app:layout_constraintTop_toBottomOf="@id/digitFourButton" />
 
 
@@ -216,9 +217,9 @@
         android:layout_width="94dp"
         android:layout_height="94dp"
         android:text="@string/zero_text"
-        app:layout_constraintBottom_toBottomOf="@id/main"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_calculator"
         app:layout_constraintEnd_toStartOf="@id/commaButton"
-        app:layout_constraintStart_toStartOf="@id/main"
+        app:layout_constraintStart_toStartOf="@id/fragment_calculator"
         app:layout_constraintTop_toBottomOf="@id/digitOneButton" />
 
     <Button
@@ -227,7 +228,7 @@
         android:layout_width="94dp"
         android:layout_height="94dp"
         android:text="@string/comma_text"
-        app:layout_constraintBottom_toBottomOf="@id/main"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_calculator"
         app:layout_constraintEnd_toStartOf="@id/deleteButton"
         app:layout_constraintStart_toEndOf="@id/digitZeroButton"
         app:layout_constraintTop_toBottomOf="@id/digitTwoButton" />
@@ -238,10 +239,9 @@
         android:layout_width="94dp"
         android:layout_height="94dp"
         android:text="@string/delete_text"
-        app:layout_constraintBottom_toBottomOf="@id/main"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_calculator"
         app:layout_constraintEnd_toStartOf="@id/equalButton"
         app:layout_constraintStart_toEndOf="@id/commaButton"
         app:layout_constraintTop_toBottomOf="@id/digitThreeButton" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
