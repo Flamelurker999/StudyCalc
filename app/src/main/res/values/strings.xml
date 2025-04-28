@@ -20,5 +20,6 @@
     <string name="seven_text">7</string>
     <string name="eight_text">8</string>
     <string name="nine_text">9</string>
+    <string name="btn_float_history">Переключиться на историю</string>
     <string name="division_by_zero_text">Делить на ноль нельзя!</string>
 </resources>

@@ -2,7 +2,7 @@ package ru.learn.calc
 
 import androidx.lifecycle.ViewModel
 
-class MainActivityViewModel : ViewModel() {
+class CalculatorViewModel : ViewModel() {
     var displayText = ""
     var operation: String? = null
     var firstNumber: Int? = null
